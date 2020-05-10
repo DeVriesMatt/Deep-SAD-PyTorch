@@ -64,16 +64,19 @@ from datasets.main import load_dataset
               help='Specify the normal class of the dataset (all other classes are considered anomalous).')
 @click.option('--known_outlier_class', type=int, default=1,
               help='Specify the known outlier class of the dataset for semi-supervised anomaly detection.')
+@click.option('--case', type=int, default=1, help='Specify the scenario 1,2,3 you are willing to run.')
+@click.option('--feat_dims', type=int, default=128, help='Specify the feature dimensions of the latent VAE variables.')
 @click.option('--n_known_outlier_classes', type=int, default=0,
               help='Number of known outlier classes.'
                    'If 0, no anomalies are known.'
                    'If 1, outlier class as specified in --known_outlier_class option.'
                    'If > 1, the specified number of outlier classes will be sampled at random.')
+
 def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, eta,
          ratio_known_normal, ratio_known_outlier, ratio_pollution, device, seed,
          optimizer_name, lr, n_epochs, lr_milestone, batch_size, weight_decay,
          pretrain, ae_optimizer_name, ae_lr, ae_n_epochs, ae_lr_milestone, ae_batch_size, ae_weight_decay,
-         num_threads, n_jobs_dataloader, normal_class, known_outlier_class, n_known_outlier_classes):
+         num_threads, n_jobs_dataloader, normal_class, known_outlier_class, n_known_outlier_classes, case, feat_dims):
     """
     Deep SAD, a method for deep semi-supervised anomaly detection.
 
@@ -86,16 +89,37 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
     # Get configuration
     cfg = Config(locals().copy())
 
+    # Create formated String for the ratio pollution variable
+    if case == 1:
+      string_ratio = ''.join(str(int(ratio_known_outlier)).split('.'))
+    elif case == 2:
+      if ratio_pollution == 0:
+        string_ratio = str(int(ratio_pollution)) + '00'
+      else:
+        string_ratio = ''.join(str(ratio_pollution).split('.')) 
+    elif case == 3:
+        string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
+    elif case == 4:
+        string_ratio = ''.join(str(eta).split('.'))
+    elif case == 5:
+        string_ratio = str(feat_dims)
+    else:
+      raise Exception('Wrong scenario number, case {}'.format(case))
+
+
     # Set up logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    log_file = xp_path + '/log.txt'
+    log_file = xp_path + '/log_{}_{}_{}.txt'.format(normal_class, known_outlier_class, string_ratio)
     file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
+    
+
 
     # Print paths
     logger.info('Log file is %s' % log_file)
@@ -108,6 +132,9 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
     logger.info('Ratio of labeled normal train samples: %.2f' % ratio_known_normal)
     logger.info('Ratio of labeled anomalous samples: %.2f' % ratio_known_outlier)
     logger.info('Pollution ratio of unlabeled train data: %.2f' % ratio_pollution)
+    logger.info('Scenario Running: %d' % case)
+    logger.info('Output and AE dimensions: %d' % feat_dims)
+
     if n_known_outlier_classes == 1:
         logger.info('Known anomaly class: %d' % known_outlier_class)
     else:
@@ -151,7 +178,7 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
 
     # Initialize DeepSAD model and set neural network phi
     deepSAD = DeepSAD(cfg.settings['eta'])
-    deepSAD.set_network(net_name)
+    deepSAD.set_network(net_name, feat_dims=feat_dims)
 
     # If specified, load Deep SAD model (center c, network weights, and possibly autoencoder weights)
     if load_model:
@@ -177,10 +204,11 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
                          batch_size=cfg.settings['ae_batch_size'],
                          weight_decay=cfg.settings['ae_weight_decay'],
                          device=device,
+                         feat_dims=feat_dims,
                          n_jobs_dataloader=n_jobs_dataloader)
 
         # Save pretraining results
-        deepSAD.save_ae_results(export_json=xp_path + '/ae_results.json')
+        deepSAD.save_ae_results(export_json=xp_path + '/ae_results_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
 
     # Log training details
     logger.info('Training optimizer: %s' % cfg.settings['optimizer_name'])
@@ -205,9 +233,9 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
     deepSAD.test(dataset, device=device, n_jobs_dataloader=n_jobs_dataloader)
 
     # Save results, model, and configuration
-    deepSAD.save_results(export_json=xp_path + '/results.json')
-    deepSAD.save_model(export_model=xp_path + '/model.tar')
-    cfg.save_config(export_json=xp_path + '/config.json')
+    deepSAD.save_results(export_json=xp_path + '/results_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
+    deepSAD.save_model(export_model=xp_path + '/model_{}_{}_{}.tar'.format(normal_class, known_outlier_class, string_ratio))
+    cfg.save_config(export_json=xp_path + '/config_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
 
     # Plot most anomalous and most normal test samples
     indices, labels, scores = zip(*deepSAD.results['test_scores'])
@@ -229,10 +257,10 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
             X_normal_low = torch.tensor(np.transpose(dataset.test_set.data[idx_normal_sorted[:32], ...], (0,3,1,2)))
             X_normal_high = torch.tensor(np.transpose(dataset.test_set.data[idx_normal_sorted[-32:], ...], (0,3,1,2)))
 
-        plot_images_grid(X_all_low, export_img=xp_path + '/all_low', padding=2)
-        plot_images_grid(X_all_high, export_img=xp_path + '/all_high', padding=2)
-        plot_images_grid(X_normal_low, export_img=xp_path + '/normals_low', padding=2)
-        plot_images_grid(X_normal_high, export_img=xp_path + '/normals_high', padding=2)
+        plot_images_grid(X_all_low, export_img=xp_path + '/all_low_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
+        plot_images_grid(X_all_high, export_img=xp_path + '/all_high_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
+        plot_images_grid(X_normal_low, export_img=xp_path + '/normals_low_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
+        plot_images_grid(X_normal_high, export_img=xp_path + '/normals_high_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
 
 
 if __name__ == '__main__':

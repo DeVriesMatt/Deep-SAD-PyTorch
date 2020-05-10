@@ -53,10 +53,10 @@ class DeepSAD(object):
             'test_time': None
         }
 
-    def set_network(self, net_name):
+    def set_network(self, net_name, feat_dims=128):
         """Builds the neural network phi."""
         self.net_name = net_name
-        self.net = build_network(net_name)
+        self.net = build_network(net_name, feat_dims=feat_dims)
 
     def train(self, dataset: BaseADDataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 50,
               lr_milestones: tuple = (), batch_size: int = 128, weight_decay: float = 1e-6, device: str = 'cuda',
@@ -87,11 +87,11 @@ class DeepSAD(object):
 
     def pretrain(self, dataset: BaseADDataset, optimizer_name: str = 'adam', lr: float = 0.001, n_epochs: int = 100,
                  lr_milestones: tuple = (), batch_size: int = 128, weight_decay: float = 1e-6, device: str = 'cuda',
-                 n_jobs_dataloader: int = 0):
+                 n_jobs_dataloader: int = 0, feat_dims: int = 128):
         """Pretrains the weights for the Deep SAD network phi via autoencoder."""
 
         # Set autoencoder network
-        self.ae_net = build_autoencoder(self.net_name)
+        self.ae_net = build_autoencoder(self.net_name, feat_dims=feat_dims)
 
         # Train
         self.ae_optimizer_name = optimizer_name
