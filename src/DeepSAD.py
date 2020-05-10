@@ -136,7 +136,7 @@ class DeepSAD(object):
                     'net_dict': net_dict,
                     'ae_net_dict': ae_net_dict}, export_model)
 
-    def load_model(self, model_path, load_ae=False, map_location='cpu'):
+    def load_model(self, model_path, load_ae_only=False, load_ae=False, feat_dims=128, map_location='cpu'):
         """Load Deep SAD model from model_path."""
 
         model_dict = torch.load(model_path, map_location=map_location)
@@ -147,8 +147,12 @@ class DeepSAD(object):
         # load autoencoder parameters if specified
         if load_ae:
             if self.ae_net is None:
-                self.ae_net = build_autoencoder(self.net_name)
-            self.ae_net.load_state_dict(model_dict['ae_net_dict'])
+                self.ae_net = build_autoencoder(self.net_name, feat_dims=feat_dims)
+            if load_ae_only:
+                # Initialize Deep SAD network weights from pre-trained encoder
+                self.init_network_weights_from_pretraining()
+            else:
+                self.ae_net.load_state_dict(model_dict['ae_net_dict'])
 
     def save_results(self, export_json):
         """Save results dict to a JSON-file."""
