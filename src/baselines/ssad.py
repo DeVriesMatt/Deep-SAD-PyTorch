@@ -206,7 +206,7 @@ class SSAD(object):
         logger.info('Test Time: {:.3f}s'.format(self.results['test_time']))
         logger.info('Finished testing.')
 
-    def load_ae(self, dataset_name, model_path):
+    def load_ae(self, dataset_name, model_path, feat_dims=128):
         """Load pretrained autoencoder from model_path for feature extraction in a hybrid SSAD model."""
 
         model_dict = torch.load(model_path, map_location='cpu')
@@ -217,8 +217,8 @@ class SSAD(object):
             net_name = dataset_name + '_mlp'
 
         if self.ae_net is None:
-            self.ae_net = build_autoencoder(net_name)
-
+            self.ae_net = build_autoencoder(net_name, feat_dims=feat_dims)
+        
         # update keys (since there was a change in network definition)
         ae_keys = list(self.ae_net.state_dict().keys())
         for i in range(len(ae_net_dict)):
@@ -226,7 +226,6 @@ class SSAD(object):
             new_key = ae_keys[i]
             ae_net_dict[new_key] = v
             i += 1
-
         self.ae_net.load_state_dict(ae_net_dict)
         self.ae_net.eval()
 
