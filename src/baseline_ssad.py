@@ -47,6 +47,7 @@ from datasets.main import load_dataset
                    'If 0, no anomalies are known.'
                    'If 1, outlier class as specified in --known_outlier_class option.'
                    'If > 1, the specified number of outlier classes will be sampled at random.')
+@click.option('--case', type=int, default=1, help='Specify the scenario 1,2,3 you are willing to run.')
 def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_normal, ratio_known_outlier,
          ratio_pollution, seed, kernel, kappa, hybrid, load_ae, n_jobs_dataloader, normal_class, known_outlier_class,
          n_known_outlier_classes, case, feat_dims, eta):
