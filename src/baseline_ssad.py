@@ -49,7 +49,7 @@ from datasets.main import load_dataset
                    'If > 1, the specified number of outlier classes will be sampled at random.')
 def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_normal, ratio_known_outlier,
          ratio_pollution, seed, kernel, kappa, hybrid, load_ae, n_jobs_dataloader, normal_class, known_outlier_class,
-         n_known_outlier_classes):
+         n_known_outlier_classes, case, feat_dims, eta):
     """
     (Hybrid) SSAD for anomaly detection as in Goernitz et al., Towards Supervised Anomaly Detection, JAIR, 2013.
 
@@ -60,6 +60,24 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
 
     # Get configuration
     cfg = Config(locals().copy())
+
+    # Create formated String for the ratio pollution variable
+    if case == 1:
+        string_ratio = ''.join(str(int(ratio_known_outlier)).split('.'))
+    elif case == 2:
+        if ratio_pollution == 0:
+            string_ratio = str(int(ratio_pollution)) + '00'
+        else:
+            string_ratio = ''.join(str(ratio_pollution).split('.'))
+    elif case == 3:
+        string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
+    elif case == 4:
+        string_ratio = ''.join(str(eta).split('.'))
+    elif case == 5:
+        string_ratio = str(feat_dims)
+    else:
+        raise Exception('Wrong scenario number, case {}'.format(case))
+
 
     # Set up logging
     logging.basicConfig(level=logging.INFO)
