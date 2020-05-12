@@ -12,11 +12,15 @@ do
 	    fi
 		for gamma_l in 0.01 0.05 0.1 0.2
 		do
-			CUDA_VISIBLE_DEVICES=1 python baseline_ssad.py fmnist fmnist_LeNet ../log/fmnist/scenario_1/ssad/ ../data --ratio_known_outlier $gamma_l --ratio_pollution 0.1 \
-			--lr 0.0001 --n_epochs 150 --lr_milestone 50 --batch_size 200 --weight_decay 0.5e-6 --pretrain True --ae_lr 0.0001 --ae_n_epochs 150 \
-			--ae_batch_size 200 --ae_weight_decay 0.5e-3 --normal_class $normal_class --known_outlier_class $unknown_class \
-			--n_known_outlier_classes 1 --seed 0 --n_jobs_dataloader 6 --case 3
+			CUDA_VISIBLE_DEVICES=1 python baseline_ssad.py fmnist ../log/fmnist/scenario_1/ssad/ ../data --ratio_known_outlier $gamma_l --ratio_pollution 0.1 \
+		  --kernel rbf --kappa 1.0 --hybrid False --load_ae ../log/DeepSAD/fashion_mnist_test/model.tar --batch_size 200 --normal_class $normal_class \
+		  --known_outlier_class $unknown_class \
+			--n_known_outlier_classes 1 --seed 0 --n_jobs_dataloader 6 
 
 		done
 	done
 done
+
+-- dataset_name, xp_path, data_path, load_config, load_model, ratio_known_normal, ratio_known_outlier,
+         -- ratio_pollution, seed, kernel, kappa, hybrid, load_ae, n_jobs_dataloader, normal_class, known_outlier_class,
+        --  n_known_outlier_classes
