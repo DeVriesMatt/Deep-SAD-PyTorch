@@ -3,7 +3,7 @@
 ################################3
 # Scenario 2
 # This is the ssad Configuration
-for normal_class in 0 2 3 4 5 6 7 8 9
+for normal_class in 0 1 2 3 4 5 6 7 8 9
 do
 	for unknown_class in {0..9}
 	do
@@ -16,7 +16,7 @@ do
 			CUDA_VISIBLE_DEVICES=1 python baseline_ssad.py fmnist ../log/fmnist/scenario_1/ssad/ ../data --ratio_known_outlier 0.05 --ratio_pollution $gamma_p \
 		  --kernel rbf --kappa 1.0 --hybrid False --load_ae ../log/DeepSAD/fashion_mnist_test/model.tar --normal_class $normal_class \
 		  --known_outlier_class $unknown_class \
-			--n_known_outlier_classes 1 --seed 0 --n_jobs_dataloader 6
+			--n_known_outlier_classes 1 --seed 0 --n_jobs_dataloader 6 --case 2
 
 		done
 	done
