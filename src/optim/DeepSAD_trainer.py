@@ -40,7 +40,7 @@ class DeepSADTrainer(BaseTrainer):
 
         # Set device for network
         net = net.to(self.device)
-
+        
         # Set optimizer (Adam optimizer for now)
         optimizer = optim.Adam(net.parameters(), lr=self.lr, weight_decay=self.weight_decay)
 

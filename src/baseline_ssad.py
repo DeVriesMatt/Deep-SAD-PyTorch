@@ -42,6 +42,8 @@ from datasets.main import load_dataset
               help='Specify the normal class of the dataset (all other classes are considered anomalous).')
 @click.option('--known_outlier_class', type=int, default=1,
               help='Specify the known outlier class of the dataset for semi-supervised anomaly detection.')
+@click.option('--feat_dims', type=int, default=128, help='Specify the feature dimensions of the latent VAE variables.')
+@click.option('--case', type=int, default=1, help='Specify the scenario 1,2,3 you are willing to run.')
 @click.option('--n_known_outlier_classes', type=int, default=0,
               help='Number of known outlier classes.'
                    'If 0, no anomalies are known.'
@@ -49,7 +51,7 @@ from datasets.main import load_dataset
                    'If > 1, the specified number of outlier classes will be sampled at random.')
 def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_normal, ratio_known_outlier,
          ratio_pollution, seed, kernel, kappa, hybrid, load_ae, n_jobs_dataloader, normal_class, known_outlier_class,
-         n_known_outlier_classes):
+         n_known_outlier_classes, case, feat_dims):
     """
     (Hybrid) SSAD for anomaly detection as in Goernitz et al., Towards Supervised Anomaly Detection, JAIR, 2013.
 
@@ -57,6 +59,20 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     :arg XP_PATH: Export path for logging the experiment.
     :arg DATA_PATH: Root path of data.
     """
+    # Create formated String for the ratio pollution variable
+    if case == 1:
+      string_ratio = ''.join(str(int(ratio_known_outlier)).split('.'))
+    elif case == 2:
+      if ratio_pollution == 0:
+        string_ratio = str(int(ratio_pollution)) + '00'
+      else:
+        string_ratio = ''.join(str(ratio_pollution).split('.')) 
+    elif case == 3:
+        string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
+    elif case == 5:
+        string_ratio = str(feat_dims)
+    else:   
+      raise Exception('Wrong scenario number, case {}'.format(case))
 
     # Get configuration
     cfg = Config(locals().copy())
@@ -66,7 +82,7 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    log_file = xp_path + '/log.txt'
+    log_file = xp_path + '/log_{}_{}_{}.txt'.format(normal_class, known_outlier_class, string_ratio)
     file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
@@ -98,6 +114,8 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     logger.info('Kappa-paramerter: %.2f' % cfg.settings['kappa'])
     logger.info('Hybrid model: %s' % cfg.settings['hybrid'])
 
+    logging.info('SSAD scenario: %d' % case)
+
     # Set seed
     if cfg.settings['seed'] != -1:
         random.seed(cfg.settings['seed'])
@@ -113,7 +131,7 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     torch.multiprocessing.set_sharing_strategy('file_system')  # fix multiprocessing issue for ubuntu
     logger.info('Computation device: %s' % device)
     logger.info('Number of dataloader workers: %d' % n_jobs_dataloader)
-
+    # print(cfg.settings['seed'])
     # Load data
     dataset = load_dataset(dataset_name, data_path, normal_class, known_outlier_class, n_known_outlier_classes,
                            ratio_known_normal, ratio_known_outlier, ratio_pollution,
@@ -132,7 +150,7 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
 
     # If specified, load model autoencoder weights for a hybrid approach
     if hybrid and load_ae is not None:
-        ssad.load_ae(dataset_name, model_path=load_ae)
+        ssad.load_ae(dataset_name, model_path=load_ae, feat_dims=feat_dims)
         logger.info('Loaded pretrained autoencoder for features from %s.' % load_ae)
 
     # Train model on dataset
@@ -142,8 +160,8 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     ssad.test(dataset, device=device, n_jobs_dataloader=n_jobs_dataloader)
 
     # Save results and configuration
-    ssad.save_results(export_json=xp_path + '/results.json')
-    cfg.save_config(export_json=xp_path + '/config.json')
+    ssad.save_results(export_json=xp_path + '/results_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
+    cfg.save_config(export_json=xp_path + '/config_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
 
     # Plot most anomalous and most normal test samples
     indices, labels, scores = zip(*ssad.results['test_scores'])
@@ -166,10 +184,10 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
             X_normal_high = torch.tensor(
                 np.transpose(dataset.test_set.data[idx_normal_sorted[-32:], ...], (0, 3, 1, 2)))
 
-        plot_images_grid(X_all_low, export_img=xp_path + '/all_low', padding=2)
-        plot_images_grid(X_all_high, export_img=xp_path + '/all_high', padding=2)
-        plot_images_grid(X_normal_low, export_img=xp_path + '/normals_low', padding=2)
-        plot_images_grid(X_normal_high, export_img=xp_path + '/normals_high', padding=2)
+        plot_images_grid(X_all_low, export_img=xp_path + '/all_low_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
+        plot_images_grid(X_all_high, export_img=xp_path + '/all_high_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
+        plot_images_grid(X_normal_low, export_img=xp_path + '/normals_low_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
+        plot_images_grid(X_normal_high, export_img=xp_path + '/normals_high_{}_{}_{}'.format(normal_class, known_outlier_class, string_ratio), padding=2)
 
 
 if __name__ == '__main__':

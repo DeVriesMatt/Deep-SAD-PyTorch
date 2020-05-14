@@ -25,8 +25,6 @@ from datasets.main import load_dataset
               help='Config JSON-file path (default: None).')
 @click.option('--load_model', type=click.Path(exists=True), default=None,
               help='Model file path (default: None).')
-@click.option('--load_ae_only', type=bool, default=False,
-              help='Set it to true if you want to load the pretrained AE and start training only the net')
 @click.option('--eta', type=float, default=1.0, help='Deep SAD hyperparameter eta (must be 0 < eta).')
 @click.option('--ratio_known_normal', type=float, default=0.0,
               help='Ratio of known (labeled) normal training examples.')
@@ -76,7 +74,7 @@ from datasets.main import load_dataset
 
 def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, eta,
          ratio_known_normal, ratio_known_outlier, ratio_pollution, device, seed,
-         optimizer_name, lr, n_epochs, lr_milestone, batch_size, weight_decay, load_ae_only,
+         optimizer_name, lr, n_epochs, lr_milestone, batch_size, weight_decay,
          pretrain, ae_optimizer_name, ae_lr, ae_n_epochs, ae_lr_milestone, ae_batch_size, ae_weight_decay,
          num_threads, n_jobs_dataloader, normal_class, known_outlier_class, n_known_outlier_classes, case, feat_dims):
     """
@@ -98,7 +96,7 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
       if ratio_pollution == 0:
         string_ratio = str(int(ratio_pollution)) + '00'
       else:
-        string_ratio = ''.join(str(ratio_pollution).split('.'))
+        string_ratio = ''.join(str(ratio_pollution).split('.')) 
     elif case == 3:
         string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
     elif case == 4:
@@ -120,6 +118,9 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
+    
+
+
     # Print paths
     logger.info('Log file is %s' % log_file)
     logger.info('Data path is %s' % data_path)
@@ -132,7 +133,6 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
     logger.info('Ratio of labeled anomalous samples: %.2f' % ratio_known_outlier)
     logger.info('Pollution ratio of unlabeled train data: %.2f' % ratio_pollution)
     logger.info('Scenario Running: %d' % case)
-    logger.info('Train only the network: %s' % load_ae_only)
     logger.info('Output and AE dimensions: %d' % feat_dims)
 
     if n_known_outlier_classes == 1:
@@ -182,36 +182,33 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
 
     # If specified, load Deep SAD model (center c, network weights, and possibly autoencoder weights)
     if load_model:
-        deepSAD.load_model(model_path=load_model, load_ae_only=False, feat_dims=feat_dims, load_ae=True, map_location=device)
+        deepSAD.load_model(model_path=load_model, load_ae=True, map_location=device)
         logger.info('Loading model from %s.' % load_model)
 
-    if load_ae_only:
-        logging.info('Pretrain skipped... Load weights from pretrained AE')
-    else:
-        logger.info('Pretraining: %s' % pretrain)
-        if pretrain:
-            # Log pretraining details
-            logger.info('Pretraining optimizer: %s' % cfg.settings['ae_optimizer_name'])
-            logger.info('Pretraining learning rate: %g' % cfg.settings['ae_lr'])
-            logger.info('Pretraining epochs: %d' % cfg.settings['ae_n_epochs'])
-            logger.info('Pretraining learning rate scheduler milestones: %s' % (cfg.settings['ae_lr_milestone'],))
-            logger.info('Pretraining batch size: %d' % cfg.settings['ae_batch_size'])
-            logger.info('Pretraining weight decay: %g' % cfg.settings['ae_weight_decay'])
+    logger.info('Pretraining: %s' % pretrain)
+    if pretrain:
+        # Log pretraining details
+        logger.info('Pretraining optimizer: %s' % cfg.settings['ae_optimizer_name'])
+        logger.info('Pretraining learning rate: %g' % cfg.settings['ae_lr'])
+        logger.info('Pretraining epochs: %d' % cfg.settings['ae_n_epochs'])
+        logger.info('Pretraining learning rate scheduler milestones: %s' % (cfg.settings['ae_lr_milestone'],))
+        logger.info('Pretraining batch size: %d' % cfg.settings['ae_batch_size'])
+        logger.info('Pretraining weight decay: %g' % cfg.settings['ae_weight_decay'])
 
-            # Pretrain model on dataset (via autoencoder)
-            deepSAD.pretrain(dataset,
-                             optimizer_name=cfg.settings['ae_optimizer_name'],
-                             lr=cfg.settings['ae_lr'],
-                             n_epochs=cfg.settings['ae_n_epochs'],
-                             lr_milestones=cfg.settings['ae_lr_milestone'],
-                             batch_size=cfg.settings['ae_batch_size'],
-                             weight_decay=cfg.settings['ae_weight_decay'],
-                             device=device,
-                             feat_dims=feat_dims,
-                             n_jobs_dataloader=n_jobs_dataloader)
+        # Pretrain model on dataset (via autoencoder)
+        deepSAD.pretrain(dataset,
+                         optimizer_name=cfg.settings['ae_optimizer_name'],
+                         lr=cfg.settings['ae_lr'],
+                         n_epochs=cfg.settings['ae_n_epochs'],
+                         lr_milestones=cfg.settings['ae_lr_milestone'],
+                         batch_size=cfg.settings['ae_batch_size'],
+                         weight_decay=cfg.settings['ae_weight_decay'],
+                         device=device,
+                         feat_dims=feat_dims,
+                         n_jobs_dataloader=n_jobs_dataloader)
 
-            # Save pretraining results
-            deepSAD.save_ae_results(export_json=xp_path + '/ae_results_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
+        # Save pretraining results
+        deepSAD.save_ae_results(export_json=xp_path + '/ae_results_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
 
     # Log training details
     logger.info('Training optimizer: %s' % cfg.settings['optimizer_name'])

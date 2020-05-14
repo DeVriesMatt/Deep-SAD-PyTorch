@@ -6,7 +6,7 @@ from .vae import VariationalAutoencoder
 from .dgm import DeepGenerativeModel, StackedDeepGenerativeModel
 
 
-def build_network(net_name, feat_dims, ae_net=None):
+def build_network(net_name, ae_net=None, feat_dims=128):
     """Builds the neural network."""
 
     implemented_networks = ('mnist_LeNet', 'mnist_DGM_M2', 'mnist_DGM_M1M2',
@@ -39,7 +39,7 @@ def build_network(net_name, feat_dims, ae_net=None):
         net = StackedDeepGenerativeModel([1*28*28, 2, 64, [256, 128]], features=ae_net)
 
     if net_name == 'cifar10_LeNet':
-        net = CIFAR10_LeNet()
+        net = CIFAR10_LeNet(rep_dim=feat_dims)
 
     if net_name == 'cifar10_DGM_M2':
         net = DeepGenerativeModel([3*32*32, 2, 128, [512, 256]], classifier_net=CIFAR10_LeNet)
@@ -83,13 +83,10 @@ def build_network(net_name, feat_dims, ae_net=None):
     if net_name == 'thyroid_DGM_M2':
         net = DeepGenerativeModel([6, 2, 4, [32, 16]])
 
-    if net_name == 'fmnist_LeNet':
-        net = FashionMNIST_LeNet(rep_dim=feat_dims)
-
     return net
 
 
-def build_autoencoder(net_name, feat_dims):
+def build_autoencoder(net_name, feat_dims=128):
     """Builds the corresponding autoencoder network."""
 
     implemented_networks = ('mnist_LeNet', 'mnist_DGM_M1M2',
@@ -103,7 +100,7 @@ def build_autoencoder(net_name, feat_dims):
     ae_net = None
 
     if net_name == 'mnist_LeNet':
-        ae_net = MNIST_LeNet_Autoencoder()
+        ae_net = MNIST_LeNet_Autoencoder(rep_dim=feat_dims)
 
     if net_name == 'mnist_DGM_M1M2':
         ae_net = VariationalAutoencoder([1*28*28, 32, [128, 64]])
@@ -115,7 +112,7 @@ def build_autoencoder(net_name, feat_dims):
         ae_net = VariationalAutoencoder([1*28*28, 64, [256, 128]])
 
     if net_name == 'cifar10_LeNet':
-        ae_net = CIFAR10_LeNet_Autoencoder()
+        ae_net = CIFAR10_LeNet_Autoencoder(rep_dim=feat_dims)
 
     if net_name == 'cifar10_DGM_M1M2':
         ae_net = VariationalAutoencoder([3*32*32, 128, [512, 256]])
