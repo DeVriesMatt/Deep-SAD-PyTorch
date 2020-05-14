@@ -12,7 +12,7 @@ do
 	    fi
 		for gamma_l in 0.01 0.05 0.1 0.2
 		do
-			python baseline_ssad.py cifar10 ../log/cifar-10/scenario_1/ssad_raw ../data \
+			python baseline_ssad.py fmnist ../log/fmnist/scenario_1/ssad_raw ../data \
 				--ratio_known_outlier $gamma_l \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
@@ -24,7 +24,7 @@ do
 				--case 1 \
 				--n_jobs_dataloader 8;
 
-			python baseline_ssad.py cifar10 ../log/cifar-10/scenario_1/ssad_hybrid ../data \
+			python baseline_ssad.py fmnist ../log/fmnist/scenario_1/ssad_hybrid ../data \
 				--ratio_known_outlier gamma_l \
 				--ratio_pollution 0.1 \
 				--kernel rbf \

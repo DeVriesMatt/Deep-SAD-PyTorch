@@ -175,7 +175,7 @@ class ConvexSSAD:
         return self.alphas
 
     def apply(self, kernel):
-        """ Application of dual trained ssad.
+        """ Application of dual trained ssad_raw.
             kernel = get_kernel(Y, X[:, cssad.svs], kernel_type, kernel_param)
         """
         if kernel.shape[1] == self.samples:
