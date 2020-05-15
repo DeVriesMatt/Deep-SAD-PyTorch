@@ -25,7 +25,7 @@ do
 				--n_jobs_dataloader 8;
 
 			python baseline_ssad.py fmnist ../log/fmnist/scenario_1/ssad_hybrid ../data \
-				--ratio_known_outlier gamma_l \
+				--ratio_known_outlier $gamma_l \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
 				--kappa 1.0 \
