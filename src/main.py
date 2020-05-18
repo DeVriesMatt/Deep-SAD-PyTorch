@@ -220,29 +220,6 @@ def main(dataset_name, net_name, xp_path, data_path, load_config, load_model, et
 
 
     logger.info('Pretraining: %s' % pretrain)
-    if pretrain:
-        # Log pretraining details
-        logger.info('Pretraining optimizer: %s' % cfg.settings['ae_optimizer_name'])
-        logger.info('Pretraining learning rate: %g' % cfg.settings['ae_lr'])
-        logger.info('Pretraining epochs: %d' % cfg.settings['ae_n_epochs'])
-        logger.info('Pretraining learning rate scheduler milestones: %s' % (cfg.settings['ae_lr_milestone'],))
-        logger.info('Pretraining batch size: %d' % cfg.settings['ae_batch_size'])
-        logger.info('Pretraining weight decay: %g' % cfg.settings['ae_weight_decay'])
-
-        # Pretrain model on dataset (via autoencoder)
-        deepSAD.pretrain(dataset,
-                         optimizer_name=cfg.settings['ae_optimizer_name'],
-                         lr=cfg.settings['ae_lr'],
-                         n_epochs=cfg.settings['ae_n_epochs'],
-                         lr_milestones=cfg.settings['ae_lr_milestone'],
-                         batch_size=cfg.settings['ae_batch_size'],
-                         weight_decay=cfg.settings['ae_weight_decay'],
-                         device=device,
-                         feat_dims=feat_dims,
-                         n_jobs_dataloader=n_jobs_dataloader)
-
-        # Save pretraining results
-        deepSAD.save_ae_results(export_json=xp_path + '/ae_results_{}_{}_{}.json'.format(normal_class, known_outlier_class, string_ratio))
 
     # Log training details
     logger.info('Training optimizer: %s' % cfg.settings['optimizer_name'])
