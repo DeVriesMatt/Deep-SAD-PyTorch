@@ -30,7 +30,7 @@ do
 				--kernel rbf \
 				--kappa 1.0 \
 				--hybrid True \
-				--load_ae ../log/cifar-10/scenario_2/deepSAD/model_${normal_class}_${unknown_class}_005.tar \
+				--load_ae ../log/fmnist/scenario_2/deepSAD/model_${normal_class}_${unknown_class}_005.tar \
 				--normal_class $normal_class \
 				--known_outlier_class $unknown_class \
 				--n_known_outlier_classes 1 \
