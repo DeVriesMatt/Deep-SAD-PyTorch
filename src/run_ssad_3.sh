@@ -9,7 +9,7 @@ do
 	do
 		for kappa in 2 3 5
 		do
-			python baseline_ssad.py cifar10 ../log/cifar-10/scenario_3/ssad_raw ../data \
+			python baseline_ssad.py fmnist ../log/fmnist/scenario_3/ssad_raw ../data \
 				--ratio_known_outlier 0.05 \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
@@ -21,7 +21,7 @@ do
 				--case 3 \
 				--n_jobs_dataloader 8;
 
-			python baseline_ssad.py cifar10 ../log/cifar-10/scenario_3/ssad_hybrid ../data \
+			python baseline_ssad.py cifar10 ../log/fmnist/scenario_3/ssad_hybrid ../data \
 				--ratio_known_outlier 0.05 \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
