@@ -14,7 +14,7 @@ do
 		for eta in 0.01 0.1 10 100
 		do
 
-			CUDA_VISIBLE_DEVICES=2 python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_4/deepSAD/ ../data \
+			CUDA_VISIBLE_DEVICES=2 python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_4/deepSAD ../data \
 			--load_model ../log/fmnist/scenario_1/deepSAD/model_0_1_1_0.tar \
       --load_ae_only True\
 			--ratio_known_outlier 0.05 --ratio_pollution 0.1 \
