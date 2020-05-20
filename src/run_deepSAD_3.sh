@@ -9,7 +9,7 @@ do
 	do
 		for kappa in 2 3 5
 		do
-			CUDA_VISIBLE_DEVICES=3  python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_3/deepSAD ../data \
+			CUDA_VISIBLE_DEVICES=0  python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_3/deepSAD ../data \
 			--load_model ../log/fmnist/scenario_1/deepSAD/model_0_1_1_0.tar \
       --load_ae_only True\
 			--ratio_known_outlier 0.05 --ratio_pollution 0.1 \
