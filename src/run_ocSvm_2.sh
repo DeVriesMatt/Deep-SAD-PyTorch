@@ -12,8 +12,8 @@ do
     	fi
 		for gamma_p in 0. 0.01 0.05 0.1 0.2
 		do
-		  OC-SVM
-			python baseline_ocsvm.py cifar10 ../log/cifar-10/scenario_2/ocsvm ../data \
+#		  OC-SVM
+			python baseline_ocsvm.py fmnist ../log/fmnist/scenario_2/ocsvm ../data \
 			--ratio_known_outlier 0.05 \
 			--ratio_pollution $gamma_p \
 			--kernel rbf \
@@ -26,7 +26,7 @@ do
 
 	# 		# OC-SVM Hybrid
 	# 		# TODO Train the Deep-SAD with pretrain first and then load the pretrain weights to play with it!
-			python baseline_ocsvm.py cifar10 ../log/cifar-10/scenario_2/ocsvmHybrid ../data \
+			python baseline_ocsvm.py cifar10 ../log/fmnist/scenario_2/ocsvmHybrid ../data \
 			--ratio_known_outlier 0.05 \
 			--ratio_pollution $gamma_p \
 			--kernel rbf \
@@ -35,7 +35,7 @@ do
 			--n_known_outlier_classes 1 \
       --seed 0 \
 			--hybrid True \
-			--load_ae ../log/cifar-10/scenario_2/deepSAD/model_${normal_class}_${unknown_class}_005.tar \
+			--load_ae ../log/fmnist/scenario_2/deepSAD/model_${normal_class}_${unknown_class}_005.tar \
       --case 2 \
 			--n_jobs_dataloader 8
 		done
