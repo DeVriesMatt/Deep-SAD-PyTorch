@@ -65,8 +65,8 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     elif case == 2:
         if ratio_pollution == 0:
             string_ratio = str(int(ratio_pollution)) + '00'
-          else:
-                string_ratio = ''.join(str(ratio_pollution).split('.'))
+        else:
+            string_ratio = ''.join(str(ratio_pollution).split('.'))
     elif case == 3:
         string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
     elif case == 5:
