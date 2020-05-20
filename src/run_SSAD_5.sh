@@ -12,13 +12,13 @@ do
 	    fi
 		for dims in 16 32 64 256 512
 		do
-			python baseline_ssad.py cifar10 ../log/cifar-10/scenario_5/deepSAD ../data \
+			python baseline_ssad.py fmnist ../log/fmnist/scenario_5/deepSAD ../data \
 				--ratio_known_outlier 0.05 \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
 				--kappa 1.0 \
 				--hybrid True \
-				--load_ae ../log/cifar-10/scenario_5/deepSAD/model_0_1_${dims}.tar \
+				--load_ae ../log/fmnist/scenario_5/deepSAD/model_0_1_${dims}.tar \
 				--normal_class $normal_class \
 				--known_outlier_class $unknown_class \
 				--n_known_outlier_classes 1 \
