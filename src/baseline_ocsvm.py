@@ -59,16 +59,16 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
     """
     # Create formated String for the ratio pollution variable
     if case == 1:
-      string_ratio = ''.join(str(int(ratio_known_outlier)).split('.'))
+        string_ratio = ''.join(str(int(ratio_known_outlier)).split('.'))
     elif case == 2:
-      if ratio_pollution == 0:
-        string_ratio = str(int(ratio_pollution)) + '00'
-      else:
-        string_ratio = ''.join(str(ratio_pollution).split('.')) 
+        if ratio_pollution == 0:
+            string_ratio = str(int(ratio_pollution)) + '00'
+        else:
+            string_ratio = ''.join(str(ratio_pollution).split('.'))
     elif case == 3:
         string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
     else:   
-      raise Exception('Wrong scenario number, case {}'.format(case))
+        raise Exception('Wrong scenario number, case {}'.format(case))
 
     # Get configuration
     cfg = Config(locals().copy())
