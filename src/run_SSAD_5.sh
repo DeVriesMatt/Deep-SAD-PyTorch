@@ -9,7 +9,7 @@ do
 	do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
-	    fi
+	  fi
 		for dims in 16 32 64 256 512
 		do
 			python baseline_ssad.py fmnist ../log/fmnist/scenario_5/deepSAD ../data \
