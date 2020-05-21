@@ -9,7 +9,7 @@ do
 	do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
-    	fi
+    fi
 		for kappa in 0
 		do
 			# OC-SVM
