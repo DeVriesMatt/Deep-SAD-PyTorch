@@ -13,7 +13,7 @@ do
 		for gamma_p in 0. 0.01 0.05 0.1 0.2
 		do
 
-			CUDA_VISIBLE_DEVICES=0 python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_2/deepSAD/ ../data \
+			CUDA_VISIBLE_DEVICES=0 python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_2/deepSAD ../data \
 			--load_model ../log/fmnist/scenario_1/deepSAD/model_0_1_1_0.tar \
       --load_ae_only True\
 			--ratio_known_outlier 0.05 --ratio_pollution $gamma_p \
