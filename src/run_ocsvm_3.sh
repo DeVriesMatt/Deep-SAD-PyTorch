@@ -13,7 +13,7 @@ do
 		for kappa in 2 3 5
 		do
 			# OC-SVM
-			python baseline_ocsvm.py cifar10 ../log/cifar-10/scenario_1/ocsvm ../data \
+			python baseline_ocsvm.py fmnist ../log/fmnist/scenario_1/ocsvm ../data \
 				--ratio_known_outlier 0.05 \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
@@ -25,7 +25,7 @@ do
 				--n_jobs_dataloader 8;
 
 	# 		# OC-SVM Hybrid
-			python baseline_ocsvm.py cifar10 ../log/cifar-10/scenario_1/ocsvmHybrid ../data \
+			python baseline_ocsvm.py fmnist ../log/fmnist/scenario_1/ocsvmHybrid ../data \
 			--ratio_known_outlier 0.05 \
 			--ratio_pollution 0.1 \
 			--kernel rbf \
@@ -34,7 +34,7 @@ do
 			--n_known_outlier_classes $kappa \
             --seed 0 \
 			--hybrid True \
-			--load_ae ../log/cifar-10/scenario_1/deepSAD/model_${normal_class}_${unknown_class}_0.tar \
+			--load_ae ../log/fmnist/scenario_1/deepSAD/model_${normal_class}_${unknown_class}_0.tar \
             --case 1 \
 			--n_jobs_dataloader 8
 		done
