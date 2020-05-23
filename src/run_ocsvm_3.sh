@@ -21,7 +21,7 @@ do
 				--known_outlier_class $unknown_class \
 				--n_known_outlier_classes $kappa \
 				--seed 0 \
-                --case 1 \
+                --case 3 \
 				--n_jobs_dataloader 8;
 
 	# 		# OC-SVM Hybrid
@@ -35,7 +35,7 @@ do
             --seed 0 \
 			--hybrid True \
 			--load_ae ../log/fmnist/scenario_1/deepSAD/model_${normal_class}_${unknown_class}_0.tar \
-            --case 1 \
+            --case 3 \
 			--n_jobs_dataloader 8
 		done
 	done
