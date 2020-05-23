@@ -10,28 +10,28 @@ do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
     fi
-		for kappa in 0
+		for kappa in 2 3 5
 		do
 			# OC-SVM
 			python baseline_ocsvm.py cifar10 ../log/cifar-10/scenario_1/ocsvm ../data \
-				--ratio_known_outlier $gamma_l \
+				--ratio_known_outlier 0.05 \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
 				--normal_class $normal_class \
 				--known_outlier_class $unknown_class \
-				--n_known_outlier_classes 1 \
+				--n_known_outlier_classes $kappa \
 				--seed 0 \
                 --case 1 \
 				--n_jobs_dataloader 8;
 
 	# 		# OC-SVM Hybrid
 			python baseline_ocsvm.py cifar10 ../log/cifar-10/scenario_1/ocsvmHybrid ../data \
-			--ratio_known_outlier $gamma_l \
+			--ratio_known_outlier 0.05 \
 			--ratio_pollution 0.1 \
 			--kernel rbf \
 			--normal_class $normal_class \
 			--known_outlier_class $unknown_class \
-			--n_known_outlier_classes 1 \
+			--n_known_outlier_classes $kappa \
             --seed 0 \
 			--hybrid True \
 			--load_ae ../log/cifar-10/scenario_1/deepSAD/model_${normal_class}_${unknown_class}_0.tar \
