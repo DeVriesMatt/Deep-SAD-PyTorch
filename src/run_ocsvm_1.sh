@@ -10,7 +10,7 @@ do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
     	fi
-		for gamma_l in 0.
+		for gamma_l in 0.01 0.05 0.1 0.2
 		do
 			# OC-SVM
 			python baseline_ocsvm.py fmnist ../log/fmnist/scenario_1/ocsvm ../data \
