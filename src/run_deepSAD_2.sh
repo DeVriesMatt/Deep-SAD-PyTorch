@@ -9,7 +9,7 @@ do
 	do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
-	    fi
+	  fi
 		for gamma_p in 0. 0.01 0.05 0.1 0.2
 		do
 
