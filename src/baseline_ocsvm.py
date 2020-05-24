@@ -47,9 +47,11 @@ from datasets.main import load_dataset
                    'If 0, no anomalies are known.'
                    'If 1, outlier class as specified in --known_outlier_class option.'
                    'If > 1, the specified number of outlier classes will be sampled at random.')
+@click.option('--feat_dims', type=int, default=128, help='Feature output dimensions.')
+
 def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_normal, ratio_known_outlier,
          ratio_pollution, seed, kernel, nu, hybrid, load_ae, n_jobs_dataloader, normal_class, known_outlier_class,
-         n_known_outlier_classes, case):
+         n_known_outlier_classes, case, feat_dims):
     """
     (Hybrid) One-Class SVM for anomaly detection.
 
@@ -67,7 +69,7 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
             string_ratio = ''.join(str(ratio_pollution).split('.'))
     elif case == 3:
         string_ratio = str(int(n_known_outlier_classes)) + '_' + str(int(seed))
-    else:   
+    else:
         raise Exception('Wrong scenario number, case {}'.format(case))
 
     # Get configuration
@@ -143,7 +145,7 @@ def main(dataset_name, xp_path, data_path, load_config, load_model, ratio_known_
 
     # If specified, load model autoencoder weights for a hybrid approach
     if hybrid and load_ae is not None:
-        ocsvm.load_ae(dataset_name, model_path=load_ae)
+        ocsvm.load_ae(dataset_name, model_path=load_ae, feat_dims=feat_dims)
         logger.info('Loaded pretrained autoencoder for features from %s.' % load_ae)
 
     # Train model on dataset

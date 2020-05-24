@@ -183,7 +183,7 @@ class OCSVM(object):
         logger.info('Test Time: {:.3f}s'.format(self.results['test_time']))
         logger.info('Finished testing.')
 
-    def load_ae(self, dataset_name, model_path):
+    def load_ae(self, dataset_name, model_path, feat_dims):
         """Load pretrained autoencoder from model_path for feature extraction in a hybrid OC-SVM model."""
 
         model_dict = torch.load(model_path, map_location='cpu')
@@ -194,7 +194,7 @@ class OCSVM(object):
             net_name = dataset_name + '_mlp'
 
         if self.ae_net is None:
-            self.ae_net = build_autoencoder(net_name)
+            self.ae_net = build_autoencoder(net_name, feat_dims=feat_dims)
 
         # update keys (since there was a change in network definition)
         ae_keys = list(self.ae_net.state_dict().keys())
