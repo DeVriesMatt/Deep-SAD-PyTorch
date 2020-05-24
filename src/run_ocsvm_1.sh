@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ################################3
-# Scenario 2
+# Scenario 1
 # This is the deepSAD Configuration
 for normal_class in 0 1 2 3 4
 do
@@ -9,7 +9,7 @@ do
 	do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
-    	fi
+    fi
 		for gamma_l in 0.01 0.05 0.1 0.2
 		do
 			# OC-SVM
