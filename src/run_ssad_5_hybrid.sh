@@ -25,7 +25,7 @@ do
 #				--case 5 \
 #				--n_jobs_dataloader 8;
 
-			python baseline_ssad.py fmnist ../log/fmnist/scenario_5/ssad_raw ../data \
+			python baseline_ssad.py fmnist ../log/fmnist/scenario_5/ssad_hybrid ../data \
 				--ratio_known_outlier 0.05 \
 				--ratio_pollution 0.1 \
 				--kernel rbf \
