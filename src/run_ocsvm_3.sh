@@ -5,11 +5,8 @@
 # ocsvm configuration for scneario 3
 for normal_class in 0 1 2 3 4 5 6 7 8 9
 do
-	for unknown_class in 0 1 2 3 4 5 6 7 8 9
+	for seed in 0 1 2 3 4 5 6 7 8 9
 	do
-		if [ $normal_class -eq $unknown_class ]; then
-      		continue
-    fi
 		for kappa in 2 3 5
 		do
 			# OC-SVM
@@ -18,9 +15,9 @@ do
 				--ratio_pollution 0.1 \
 				--kernel rbf \
 				--normal_class $normal_class \
-				--known_outlier_class $unknown_class \
+				--known_outlier_class 0 \
 				--n_known_outlier_classes $kappa \
-				--seed 0 \
+				--seed $seed \
                 --case 3 \
 				--n_jobs_dataloader 8;
 
@@ -30,11 +27,11 @@ do
 			--ratio_pollution 0.1 \
 			--kernel rbf \
 			--normal_class $normal_class \
-			--known_outlier_class $unknown_class \
+			--known_outlier_class 0 \
 			--n_known_outlier_classes $kappa \
-            --seed 0 \
+      --seed $seed \
 			--hybrid True \
-			--load_ae ../log/fmnist/scenario_3/deepSAD/model_${normal_class}_0_${kappa}_${unknown_class}_0.tar \
+			--load_ae ../log/fmnist/scenario_3/deepSAD/model_${normal_class}_0_${kappa}_${seed}.tar \
             --case 3 \
 			--n_jobs_dataloader 8
 		done
