@@ -3,7 +3,7 @@
 ################################3
 # Scenario 3
 # ocsvm configuration for scneario 3
-for normal_class in 0 1 2 3 4 5 6 7 8 9
+for normal_class in 2 3 4 5 6 7 8 9
 do
 	for seed in 0 1 2 3 4 5 6 7 8 9
 	do
@@ -33,7 +33,7 @@ do
 			--hybrid True \
 			--load_ae ../log/fmnist/scenario_3/deepSAD/model_${normal_class}_0_${kappa}_${seed}.tar \
             --case 3 \
-			--n_jobs_dataloader 8
+			--n_jobs_dataloader 8;
 		done
 	done
 done
