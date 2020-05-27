@@ -3,7 +3,7 @@
 ################################3
 # Scenario 2
 # This is the deepSAD Configuration
-for normal_class in 0 1 2 3 4 5 6 7 8 9
+for normal_class in 3 4 5 6 7 8 9
 do
 	for unknown_class in 0 1 2 3 4 5 6 7 8 9
 	do

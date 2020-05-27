@@ -7,11 +7,12 @@ for normal_class in 4 5 6 7 8 9
 do
 	for unknown_class in 0 1 2 3 4 5 6 7 8 9
 	do
-        if [ $normal_class -eq $unknown_class ]; then
-            continue
-        fi
+    if [ $normal_class -eq $unknown_class ]; then
+        continue
+    fi
 		for gamma_l in 0.01 0.05 0.1 0.2
 		do
+
 			python baseline_ssad.py fmnist ../log/fmnist/scenario_1/ssad_hybrid ../data \
 				--ratio_known_outlier $gamma_l \
 				--ratio_pollution 0.1 \
@@ -25,6 +26,7 @@ do
 				--seed 0 \
 				--case 1 \
 				--n_jobs_dataloader 6;
+
 		done
 	done
 done
