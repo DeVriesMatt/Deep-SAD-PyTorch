@@ -4,9 +4,9 @@
 # Scenario 2
 # This is the deepSAD Configuration
 
-for normal_class in 9
+for normal_class in 1
 do
-	for unknown_class in 6 7 8 9
+	for unknown_class in 1 2 3 4 5 6 7 8 9
     do
         if [ $normal_class -eq $unknown_class ]; then
       		continue
