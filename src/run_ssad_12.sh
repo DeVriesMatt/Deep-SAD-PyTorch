@@ -25,3 +25,6 @@ do
                 --seed 0 \
                 --case 1 \
                 --n_jobs_dataloader 8;
+        done
+    done
+done

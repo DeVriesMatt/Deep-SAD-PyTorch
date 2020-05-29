@@ -23,6 +23,9 @@ do
                 --seed 0 \
                 --case 1 \
                 --n_jobs_dataloader 8;
+        done
+    done
+done
 
 for normal_class in 1 2 3 4
 do
