@@ -3,14 +3,14 @@
 ################################3
 # Scenario 1
 # This is the deepSAD Configuration
-for normal_class in 0 1 2 3 4
+for normal_class in 0 1 2 3 4 5 6 7 8 9
 do
 	for unknown_class in 0 1 2 3 4 5 6 7 8 9
 	do
 		if [ $normal_class -eq $unknown_class ]; then
       		continue
     fi
-		for gamma_l in 0.01 0.05 0.1 0.2
+		for gamma_l in 0.01 0.05 0.1
 		do
 			# OC-SVM
 #			python baseline_ocsvm.py fmnist ../log/fmnist/scenario_1/ocsvm ../data \
