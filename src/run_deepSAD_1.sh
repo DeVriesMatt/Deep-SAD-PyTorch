@@ -12,7 +12,7 @@ do
         fi
         for gamma_l in 0.01 0.05 0.1
         do
-            python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_1/deepSAD/ ../data \
+            CUDA_VISIBLE_DEVICES=2 python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_1/deepSAD/ ../data \
             --load_model ../log/fmnist/scenario_1/deepSAD/model_0_1_1_0.tar \
       --load_ae_only True\
             --ratio_known_outlier $gamma_l --ratio_pollution 0.1 \
@@ -33,7 +33,7 @@ do
 	    fi
 		for gamma_l in 0.01 0.05 0.1 
 		do
-			python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_1/deepSAD/ ../data \
+			CUDA_VISIBLE_DEVICES=2 python main.py fmnist fmnist_LeNet ../log/fmnist/scenario_1/deepSAD/ ../data \
 			--load_model ../log/fmnist/scenario_1/deepSAD/model_0_1_1_0.tar \
       --load_ae_only True\
 			--ratio_known_outlier $gamma_l --ratio_pollution 0.1 \
