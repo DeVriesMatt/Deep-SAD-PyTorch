@@ -3,7 +3,7 @@
 ################################3
 # Scenario 3
 # ocsvm configuration for scneario 3
-for normal_class in 4
+for normal_class in 5
 do
     for seed in 4 5 6 7 8 9
     do
@@ -24,7 +24,7 @@ do
     done
 done
 
-for normal_class in 5 6 7 8 9
+for normal_class in 6 7 8 9
 do
 	for seed in 0 1 2 3 4 5 6 7 8 9
 	do
