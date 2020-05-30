@@ -5,7 +5,7 @@
 # This is the ocsvm Configuration
 for normal_class in 5
 do
-    for unknown_class in 2
+    for unknown_class in 4
     do
         if [ $normal_class -eq $unknown_class ]; then
               continue
@@ -29,7 +29,7 @@ done
 
 for normal_class in 5
 do
-    for unknown_class in 3 4 5 6 7 8 9
+    for unknown_class in 5 6 7 8 9
     do
         if [ $normal_class -eq $unknown_class ]; then
               continue
