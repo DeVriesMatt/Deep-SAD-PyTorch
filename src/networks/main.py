@@ -39,7 +39,7 @@ def build_network(net_name, feat_dims, ae_net=None):
         net = StackedDeepGenerativeModel([1*28*28, 2, 64, [256, 128]], features=ae_net)
 
     if net_name == 'cifar10_LeNet':
-        net = CIFAR10_LeNet()
+        net = CIFAR10_LeNet(rep_dim=feat_dims)
 
     if net_name == 'cifar10_DGM_M2':
         net = DeepGenerativeModel([3*32*32, 2, 128, [512, 256]], classifier_net=CIFAR10_LeNet)

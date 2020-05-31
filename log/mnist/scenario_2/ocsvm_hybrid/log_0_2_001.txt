@@ -1,0 +1,36 @@
+2020-05-26 22:04:28,979 - root - INFO - Log file is ../log/mnist/scenario_2/ocsvm_hybrid/log_0_2_001.txt.
+2020-05-26 22:04:28,979 - root - INFO - Data path is ../data.
+2020-05-26 22:04:28,979 - root - INFO - Export path is ../log/mnist/scenario_2/ocsvm_hybrid.
+2020-05-26 22:04:28,979 - root - INFO - Dataset: mnist
+2020-05-26 22:04:28,979 - root - INFO - Normal class: 0
+2020-05-26 22:04:28,979 - root - INFO - Ratio of labeled normal train samples: 0.00
+2020-05-26 22:04:28,979 - root - INFO - Ratio of labeled anomalous samples: 0.05
+2020-05-26 22:04:28,980 - root - INFO - Pollution ratio of unlabeled train data: 0.01
+2020-05-26 22:04:28,980 - root - INFO - Known anomaly class: 2
+2020-05-26 22:04:28,980 - root - INFO - OC-SVM kernel: rbf
+2020-05-26 22:04:28,980 - root - INFO - Nu-paramerter: 0.10
+2020-05-26 22:04:28,980 - root - INFO - Hybrid model: True
+2020-05-26 22:04:28,986 - root - INFO - Set seed to 0.
+2020-05-26 22:04:28,987 - root - INFO - Computation device: cpu
+2020-05-26 22:04:28,987 - root - INFO - Number of dataloader workers: 8
+2020-05-26 22:04:29,423 - root - INFO - Loaded pretrained autoencoder for features from ../log/mnist/scenario_2/deepSAD/model_0_2_005.tar.
+2020-05-26 22:04:39,478 - root - INFO - Starting training...
+2020-05-26 22:04:53,982 - root - INFO -   | Model 01/10 | Gamma: 0.00781250 | Train Time: 2.847s | Val AUC: 74.24 |
+2020-05-26 22:04:57,344 - root - INFO -   | Model 02/10 | Gamma: 0.01562500 | Train Time: 2.915s | Val AUC: 74.34 |
+2020-05-26 22:04:59,968 - root - INFO -   | Model 03/10 | Gamma: 0.03125000 | Train Time: 2.408s | Val AUC: 74.72 |
+2020-05-26 22:05:02,276 - root - INFO -   | Model 04/10 | Gamma: 0.06250000 | Train Time: 2.241s | Val AUC: 75.01 |
+2020-05-26 22:05:04,433 - root - INFO -   | Model 05/10 | Gamma: 0.12500000 | Train Time: 2.027s | Val AUC: 76.07 |
+2020-05-26 22:05:06,986 - root - INFO -   | Model 06/10 | Gamma: 0.25000000 | Train Time: 2.387s | Val AUC: 77.68 |
+2020-05-26 22:05:09,800 - root - INFO -   | Model 07/10 | Gamma: 0.50000000 | Train Time: 2.615s | Val AUC: 80.41 |
+2020-05-26 22:05:12,366 - root - INFO -   | Model 08/10 | Gamma: 1.00000000 | Train Time: 2.308s | Val AUC: 83.50 |
+2020-05-26 22:05:16,357 - root - INFO -   | Model 09/10 | Gamma: 2.00000000 | Train Time: 3.639s | Val AUC: 89.64 |
+2020-05-26 22:05:24,988 - root - INFO -   | Model 10/10 | Gamma: 4.00000000 | Train Time: 7.854s | Val AUC: 93.88 |
+2020-05-26 22:05:26,851 - root - INFO - Best Model: | Gamma: 4.00000000 | AUC: 93.88
+2020-05-26 22:05:26,851 - root - INFO - Training Time: 7.854s
+2020-05-26 22:05:26,851 - root - INFO - Finished training.
+2020-05-26 22:05:42,221 - root - INFO - Starting testing...
+2020-05-26 22:05:48,446 - root - INFO - Test AUC linear model: 84.15%
+2020-05-26 22:05:48,458 - root - INFO - Test Time linear model: 1.320s
+2020-05-26 22:05:48,458 - root - INFO - Test AUC: 94.88%
+2020-05-26 22:05:48,458 - root - INFO - Test Time: 4.851s
+2020-05-26 22:05:48,458 - root - INFO - Finished testing.
