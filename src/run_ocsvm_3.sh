@@ -6,7 +6,7 @@
 
 for normal_class in 7
 do
-	for seed in 1 2 3 4 5 6 7 8 9
+	for seed in 6 7 8 9
 	do
 		for kappa in 2 3 5
 		do
